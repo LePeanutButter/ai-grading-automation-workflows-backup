@@ -1,0 +1,351 @@
+{
+  "active": false,
+  "connections": {
+    "Globals": {
+      "main": [
+        [
+          {
+            "node": "Get all files in given path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split the result": {
+      "main": [
+        [
+          {
+            "node": "Get file content from GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert files to JSON": {
+      "main": [
+        [
+          {
+            "node": "Check for skipped Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all files in given path": {
+      "main": [
+        [
+          {
+            "node": "Split the result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get file content from GitHub": {
+      "main": [
+        [
+          {
+            "node": "Convert files to JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for skipped Credentials": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Restore n8n Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Globals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-15T17:06:55.217Z",
+  "id": "cjcgvuXgeyHJAjSP",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Restore Credentials from GitHub",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "0f3925a1-0db3-4238-933d-58ccf93cd282",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -368,
+        16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Restore from GitHub \nThis workflow will restore all instance credentials from GitHub backups.\n\n\n### Setup\nOpen `Globals` node and update the values below 👇\n\n- **repo.owner:** your Github username\n- **repo.name:** the name of your repository\n- **repo.path:** the folder to use within the repository.\n\n\nIf your username was `john-doe` and your repository was called `n8n-backups` and you wanted the credentials to go into a `credentials` folder you would set:\n\n- repo.owner - john-doe\n- repo.name - n8n-backups\n- repo.path - credentials/\n",
+        "height": 420,
+        "width": 320
+      },
+      "id": "e2f69021-b7c5-4001-9593-951af813c066",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -736,
+        -16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6cf546c5-5737-4dbd-851b-17d68e0a3780",
+              "name": "repo.owner",
+              "type": "string",
+              "value": "LePeanutButter"
+            },
+            {
+              "id": "452efa28-2dc6-4ea3-a7a2-c35d100d0382",
+              "name": "repo.name",
+              "type": "string",
+              "value": "ai-grading-automation-workflows-backup"
+            },
+            {
+              "id": "81c4dc54-86bf-4432-a23f-22c7ea831e74",
+              "name": "repo.path",
+              "type": "string",
+              "value": "credentials"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "54231c32-b615-4fb3-9bdf-c34e0daf410e",
+      "name": "Globals",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -96,
+        16
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## Edit this node 👇",
+        "height": 80,
+        "width": 150,
+        "color": 4
+      },
+      "id": "988c2f09-9029-465a-8dae-d5c79534e619",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -160,
+        -112
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Skip credential\n- The empty json files\n- The n8n account api\n- ...edit this node at will",
+        "color": 4
+      },
+      "id": "f4c53eee-706c-42b3-aee4-274c26b16bce",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        384,
+        160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/{{ $json.repo.owner }}/{{ $json.repo.name }}/contents/{{ $json.repo.path }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "options": {}
+      },
+      "id": "2692cd11-f399-4c72-9f47-bc4dbb69c9de",
+      "name": "Get all files in given path",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        128,
+        16
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "githubApi": {
+          "id": "fJyHqqloHCMpXEZJ",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "path",
+        "options": {}
+      },
+      "id": "5fdb7ff7-c3ae-4781-a8b3-58dde4b22ac9",
+      "name": "Split the result",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        -320,
+        336
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "LePeanutButter",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "ai-grading-automation-workflows-backup",
+          "mode": "name"
+        },
+        "filePath": "={{ $('Get all files in given path').item.json.path }}",
+        "additionalParameters": {}
+      },
+      "id": "d8be5d12-1566-42d4-b57f-9f36cd093b7e",
+      "name": "Get file content from GitHub",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        -80,
+        336
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "webhookId": "cf923fac-2a04-4ca2-8c3a-c470a312b6c5",
+      "credentials": {
+        "githubApi": {
+          "id": "fJyHqqloHCMpXEZJ",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "id": "f59c31ee-586c-49ac-a51f-92483d804b73",
+      "name": "Convert files to JSON",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        144,
+        336
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "credential",
+        "name": "={{ $json.data.name }}",
+        "credentialTypeName": "={{ $json.data.type }}",
+        "data": "={{ JSON.stringify($json.data.data) }}",
+        "requestOptions": {}
+      },
+      "id": "79855038-8382-437d-a6ff-a98c245277f8",
+      "name": "Restore n8n Credentials",
+      "type": "n8n-nodes-base.n8n",
+      "position": [
+        672,
+        336
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "n8nApi": {
+          "id": "nCML5JmxD0sQmTDP",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "ad031296-4ac0-4087-bc35-7975a2cc25e6",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.data }}",
+              "rightValue": ""
+            },
+            {
+              "id": "ca912a57-6a4b-4b9a-be0e-37b69d3e4917",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              },
+              "leftValue": "={{ $json.data.name }}",
+              "rightValue": "n8n account"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0df610a2-5619-4951-aa20-32921724fb56",
+      "name": "Check for skipped Credentials",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        384,
+        336
+      ],
+      "typeVersion": 2.2
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-10-15T17:06:55.240Z",
+      "updatedAt": "2025-10-15T17:06:55.240Z",
+      "role": "workflow:owner",
+      "workflowId": "cjcgvuXgeyHJAjSP",
+      "projectId": "xJrjLvOBMTENgWyr"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-15T17:08:05.000Z",
+  "versionId": "e8f7f127-474b-4b74-9b29-a9c519abeb98"
+}
