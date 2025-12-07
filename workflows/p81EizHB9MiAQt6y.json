@@ -1,0 +1,672 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Select rubric from db",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read statement PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Call Grade assignment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read statement PDF": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rubric from db": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create spreadsheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Grade assignment": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Upload results to LMS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload results to LMS": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-12-07T03:10:57.135Z",
+  "id": "p81EizHB9MiAQt6y",
+  "isArchived": false,
+  "meta": null,
+  "name": "Automatic Grader DDYA",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Submit grading workflow",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Problem statement PDF",
+              "fieldType": "file",
+              "acceptFileTypes": ".pdf",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Deliverables folder URI (Google Drive)",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Rubric identificator",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Assignment name",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -272,
+        96
+      ],
+      "id": "3a5fa58c-4f2a-4701-8883-d58fb6273b63",
+      "name": "On form submission",
+      "webhookId": "c9316fc5-119d-43d8-ac2d-4ff5ceccabf3"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "={{ $('On form submission').item.binary.Problem_statement_PDF }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        192
+      ],
+      "id": "8f655cde-659d-4f6e-a0d6-6911ba74e4c1",
+      "name": "Read statement PDF"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('On form submission').item.json['Deliverables folder URI (Google Drive)'] }}",
+            "mode": "url"
+          }
+        },
+        "options": {
+          "fields": [
+            "*"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1872,
+        96
+      ],
+      "id": "94bec902-d757-4ae3-ba2f-d0fdfd5173be",
+      "name": "Search files and folders"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        224,
+        96
+      ],
+      "id": "b35de7cf-6d3e-4d08-95d4-dda38ea93042",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "rubric_content"
+            },
+            {
+              "fieldToAggregate": "text",
+              "renameField": true,
+              "outputFieldName": "problem_statement"
+            }
+          ]
+        },
+        "options": {
+          "mergeLists": false
+        }
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        448,
+        96
+      ],
+      "id": "f6497863-cded-4210-a020-e082156c6b48",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "VbrUDAOlZMqCEfzp",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/VbrUDAOlZMqCEfzp",
+          "cachedResultName": "Grade assignment"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "fileSize": "={{ $json.size }}",
+            "fileExtension": "={{ $json.fileExtension }}",
+            "rubricContent": "={{ $('Edit Fields').item.json.rubric_content }}",
+            "statement": "={{ $('Edit Fields').item.json.problem_statement }}",
+            "fileId": "={{ $json.id }}",
+            "sheetId": "={{ $('Create spreadsheet').item.json.sheets[0].properties.sheetId }}",
+            "spreadSheetId": "={{ $('Create spreadsheet').item.json.spreadsheetId }}",
+            "schema": "={{ $('AI Agent').item.json.output.schema }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "fileSize",
+              "displayName": "fileSize",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "fileExtension",
+              "displayName": "fileExtension",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "rubricContent",
+              "displayName": "rubricContent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "statement",
+              "displayName": "statement",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "fileId",
+              "displayName": "fileId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "sheetId",
+              "displayName": "sheetId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "schema",
+              "displayName": "schema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            },
+            {
+              "id": "spreadSheetId",
+              "displayName": "spreadSheetId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2096,
+        96
+      ],
+      "name": "Call Grade assignment",
+      "id": "1ac64e70-aed2-42d1-9f41-1dbaaa17ca40"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96b4a95b-cf48-45d0-9584-ba7e1898f890",
+              "name": "rubric_content",
+              "value": "={{ $json.rubric_content.join() }}",
+              "type": "string"
+            },
+            {
+              "id": "ccb58555-b09e-4754-88c7-7c9d93163a23",
+              "name": "problem_statement",
+              "value": "={{ $json.problem_statement.join() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        96
+      ],
+      "id": "360b0323-9f93-4142-a996-424a459d12dd",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "rubrics",
+          "mode": "list",
+          "cachedResultName": "rubrics"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "identifier",
+              "value": "={{ $json['Rubric identificator'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1470ee49-49ee-45be-b9c7-3516387d4fc2",
+      "name": "Select rubric from db"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Esta es la rubrica a analizar :\n{{ $('Edit Fields').item.json.rubric_content }} ",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Tu tareas es :\n1.Analiza la rubrica que provee el profesor y determinar los encabezados de una hoja de calculo que contendra las notas y los comentarios, usa una sola celda para los comentarios\n2. A partir de estos encabezados, crear un json con 2 elementos, \"columns\" con el nombre de cada columna, para posteriormente usar en la creacion de una hoja de calculo, A las columnas identificada añade los campos \"nombre\" y \"carnet\"\n3. crea un campo  \"schema\" con un JSON schema que represente la estructura identificada (excluye los campos nombre y codigo), para usar como formato para asegurar la insercion de elementos\n\nNo incluyas información adicional a los encabezados. No necesito el contenido de la rubrica, el enunciado o cualquier información previa"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1072,
+        96
+      ],
+      "id": "dede4b51-ac03-4f0c-9f96-21dab4d937ff",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "maxTries": 3
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1072,
+        304
+      ],
+      "id": "3702091b-27e3-41f3-ae69-5f591d9347ed",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "={{ $('Select rubric from db').item.json.course_code }}-{{ $('Select rubric from db').item.json.assignment_type }}-{{ $('On form submission').item.json['Assignment name'] }}",
+        "sheetsUi": {
+          "sheetValues": [
+            {
+              "title": "={{ $('On form submission').item.json['Assignment name'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        864,
+        96
+      ],
+      "id": "963c40e3-fd05-49ec-af18-e627c6bb3ad2",
+      "name": "Create spreadsheet"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"columns\": [\n    \"especificacion\",\n    \"diseno\",\n    \"codigo\",\n    \"pruebas_enunciado\",\n    \"pruebas_propias\",\n    \"analisis_complejidad\",\n    \"pruebas_rendimiento\",\n    \"codigo_juez_evidencia\",\n    \"comentarios\"\n  ],\n  \"schema\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"especificacion\": {\n        \"type\": \"number\",\n        \"minimum\": 0,\n        \"maximum\": 5\n      },\n      \"diseno\": {\n        \"type\": \"number\",\n        \"minimum\": 0,\n        \"maximum\": 5\n      },\n      \"codigo\": {\n        \"type\": \"number\",\n        \"minimum\": 0,\n        \"maximum\": 5\n      },\n      \"pruebas_enunciado\": {\n        \"type\": \"number\",\n        \"minimum\": 0,\n        \"maximum\": 5\n      },\n      \"pruebas_propias\": {\n        \"type\": \"number\",\n        \"minimum\": 0,\n        \"maximum\": 5\n      },\n      \"analisis_complejidad\": {\n        \"type\": \"number\",\n        \"minimum\": 0,\n        \"maximum\": 5\n      },\n      \"pruebas_rendimiento\": {\n        \"type\": \"number\",\n        \"minimum\": 0,\n        \"maximum\": 5\n      },\n      \"codigo_juez_evidencia\": {\n        \"type\": \"number\",\n        \"minimum\": 0,\n        \"maximum\": 5\n      },\n      \"comentarios\": {\n        \"type\": \"string\"\n      }\n    },\n    \"required\": [\n      \"especificacion\",\n      \"diseno\",\n      \"codigo\",\n      \"pruebas_enunciado\",\n      \"pruebas_propias\",\n      \"analisis_complejidad\",\n      \"pruebas_rendimiento\",\n      \"codigo_juez_evidencia\",\n      \"comentarios\"\n    ],\n    \"additionalProperties\": false\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1216,
+        304
+      ],
+      "id": "415ce53e-0cd3-4bef-a978-7c8d1afcb3be",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ Object.fromEntries($json.output.columns.map(col => [col, \"\"])) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1424,
+        96
+      ],
+      "id": "3fe56bc0-ccae-4858-b59b-6897ad47ff1f",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.sheets[0].properties.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1632,
+        96
+      ],
+      "id": "99202b45-4a8a-4fc1-aa74-4df916753074",
+      "name": "Append row in sheet"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "rojas.ortiz.juanc@gmail.com",
+        "subject": "=Proceso de calificación de  {{ $('Select rubric from db').item.json.course_code }}-{{ $('Select rubric from db').item.json.assignment_type }}-{{ $('On form submission').item.json['Assignment name'] }}",
+        "message": "=Los entregables han sido calificados y los resultados se pueden encontrar en el siguiente enlace  {{ $('Create spreadsheet').item.json.spreadsheetUrl }} Revise las notas, recuerde que el sistema automático puede cometer errores.\n\nUna vez realice las modificaciones que considere pertinentes por favor apruebe el flujo para cargar automáticamente las notas.",
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 5,
+              "resumeUnit": "days"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2304,
+        96
+      ],
+      "id": "615e7d67-8ad8-4b4e-bde4-02a15ecc2fac",
+      "name": "Send a message",
+      "webhookId": "59deb163-b9da-435a-bbcc-abf44c46ab07"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2512,
+        96
+      ],
+      "id": "b64526b1-5c36-488b-8a5c-a4223ad85f67",
+      "name": "Upload results to LMS"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-07T03:10:57.162Z",
+      "createdAt": "2025-12-07T03:10:57.162Z",
+      "role": "workflow:owner",
+      "workflowId": "p81EizHB9MiAQt6y",
+      "projectId": "xJrjLvOBMTENgWyr"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-07T03:12:43.000Z",
+  "versionId": "460c4bfc-04e8-448b-aad7-92e91c96f0ab"
+}
