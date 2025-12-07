@@ -1,0 +1,832 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Grade assignment",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Ipynb": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for cells and images": {
+      "main": [
+        [
+          {
+            "node": "Unify inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unify inputs": {
+      "main": [
+        [
+          {
+            "node": "Grade assignment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Grade assignment",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grade assignment": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "File not supported",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Parse Notebook to JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Base 64 Images": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Convert Base64 image to Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse text to JSON": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Base 64 Images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "Parse text to JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Base64 image to Binary": {
+      "main": [
+        [
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Wait for cells and images",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Base 64 Images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cleanup notebook JSON": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait for cells and images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Notebook to JSON": {
+      "main": [
+        [
+          {
+            "node": "Cleanup notebook JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Is Ipynb",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-07T03:12:06.810Z",
+  "id": "IVduZtMBqZRFrjdk",
+  "isArchived": false,
+  "meta": null,
+  "name": "Grade assignment",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "\nconst input = $input.first().json.content.parts[0].text\n\nlet text = input;\n\nif (typeof text !== \"string\") {\n    return {\n        error: \"Input is not a string\",\n        original: text\n    };\n}\n\ntry {\n    // 2. Remove markdown fences (```json and ```)\n    text = text\n        .replace(/```json/gi, \"\")\n        .replace(/```/g, \"\")\n        .trim();\n\n    // 3. Parse JSON\n    const parsed = JSON.parse(text);\n\n    return parsed;\n\n} catch (err) {\n    return {\n        error: \"Failed to parse JSON\",\n        message: err.message,\n        cleaned_text: text\n    };\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        368
+      ],
+      "id": "56a48580-50d0-48bc-b3f1-a8bead2cc83d",
+      "name": "Parse text to JSON"
+    },
+    {
+      "parameters": {
+        "errorMessage": "File format not supported"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -1488,
+        224
+      ],
+      "id": "fb9b6b79-7858-42c0-96bc-d86e078ae5a8",
+      "name": "File not supported",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1712,
+        224
+      ],
+      "id": "ddb2c809-9e60-4d18-a403-b1e6d74b0fa9",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "=Eres un **analizador de imágenes** especializado en revisar evidencias presentadas por estudiantes en una clase de **Algoritmos y Estructuras de Datos**.  \nSe te proporcionará una imagem extraída de un notebook de programación.\n\n## Tu tarea\nAnaliza la imagen y responde unicamente con un **JSON ** con el siguiente formato:\n```json\n{\n  \"image_name\": \"<Nombre de la imagen>\",\n  \"description\": \"<descripción detallada del contenido de la imagen en español>\"\n}\n```\nEl nombre de la imagen es \"{{ $('Convert Base64 image to Binary').item.binary.data.fileName }}\"\n\n## Lineamientos para la descripción\n - Describe objetivamente el contenido visible en la imagen.\n- No inventes información que no pueda observarse.\n- Usa vocabulario coherente con el contexto de algoritmos y estructuras de datos, cuando aplique.\n- Si la imagen contiene texto, diagramas, capturas de pantalla o resultados de un juez automático, debes describirlos.\n\n## Ejemplos de contenidos esperados en las imágenes\n\n    - Diseños de solución : Diagramas de flujo, Pseudocódigo , Bocetos o esquemas de algoritmos ,Explicaciones visuales del enfoque\n\n    -  Casos de prueba:  Tablas de entradas y salidas , Ejemplos usados para validar un algoritmo, Análisis de complejidad si aparece en la imagen\n\n    - Evidencias de jueces automáticos (p. ej. VJudge): Capturas de envíos o submissions ,  Resultados: “Accepted”, “Wrong Answer”, “Runtime Error”, etc.  , Tiempo de ejecución, memoria u otros indicadores del sistema\n\n## Notas adicionales\n    Si la imagen es borrosa, incompleta o ambigua, indícalo en la descripción.\n    No evalúes la calidad del trabajo; solo describe lo que ves.\n    No agregues conclusiones ni interpretaciones extra.\n    Escapa caracteres especiales que puedan generar problemas al leer el json",
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        368
+      ],
+      "id": "7dec332e-ac5a-4396-bb58-1c8ee13d528a",
+      "name": "Analyze image"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -848,
+        368
+      ],
+      "id": "ad5bf496-0296-4383-aee3-8aca3378aef3",
+      "name": "Loop Over Base 64 Images"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "binaryPropertyName": "=data",
+        "options": {
+          "fileName": "={{ $json.id }}"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -624,
+        368
+      ],
+      "id": "cc75cc6b-3da7-4a2d-9100-b09eeaaa2ecb",
+      "name": "Convert Base64 image to Binary"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "images",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        368
+      ],
+      "id": "de6fa964-29d6-4616-b021-7ce2339836a9",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "09a1e67c-f579-4878-bae4-c8e91756fa3e",
+              "leftValue": "={{ $json.fileExtension }}",
+              "rightValue": "ipynb",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "75e26588-a62a-43ff-a1c5-05bf9dad924a",
+              "leftValue": "={{ $json.fileSize }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1936,
+        128
+      ],
+      "id": "24d55104-7132-4867-a43d-7c5a68e1f8de",
+      "name": "Is Ipynb"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Start').item.json.fileId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1712,
+        16
+      ],
+      "id": "4a7b1ac0-6ef9-4402-a4c7-999eb2bcd125",
+      "name": "Download file"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        176
+      ],
+      "id": "f077ee37-50d5-44a7-a149-63a95d0969ec",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "//-----------------------------------------------------\n// Utility: generate incremental image IDs\n//-----------------------------------------------------\nlet imageCounter = 1;\nfunction nextImageId() {\n    return String(imageCounter++).padStart(3, \"0\"); // 001, 002, ...\n}\n\n//-----------------------------------------------------\n// Deep scan for images everywhere in a cell\n// and return updated text\n//-----------------------------------------------------\nfunction extractImagesWithTrace(text, cell, imagesAccumulator) {\n    let updatedText = text;\n\n    function scan(obj) {\n        if (!obj) return;\n\n        // STRING: search embedded base64\n        if (typeof obj === \"string\") {\n            const regex = /data:image\\/(png|jpeg|jpg);base64,[A-Za-z0-9+/=]+/g;\n            let match;\n            while ((match = regex.exec(obj)) !== null) {\n                const full = match[0];\n                const type = match[1] === \"png\" ? \"image/png\" : \"image/jpeg\";\n                const base64 = full.split(\"base64,\")[1];\n                const id = `image_${nextImageId()}`;\n\n                imagesAccumulator.push({ id, type, base64 });\n                updatedText = updatedText.replace(full, `[${id}_removed]`);\n            }\n            return;\n        }\n\n        // ARRAY\n        if (Array.isArray(obj)) {\n            obj.forEach(el => scan(el));\n            return;\n        }\n\n        // OBJECT\n        if (typeof obj === \"object\") {\n            for (const key of Object.keys(obj)) {\n                const val = obj[key];\n\n                // Direct PNG / JPEG fields\n                if (key === \"png\" || key === \"jpeg\") {\n                    const id = `image_${nextImageId()}`;\n                    imagesAccumulator.push({\n                        id,\n                        type: key === \"png\" ? \"image/png\" : \"image/jpeg\",\n                        base64: val\n                    });\n                    updatedText = updatedText.replace(val, `[${id}_removed]`);\n                    continue;\n                }\n\n                // Standard Jupyter data fields\n                if (key === \"image/png\" || key === \"image/jpeg\") {\n                    const raw = Array.isArray(val) ? val.join(\"\") : val;\n                    const id = `image_${nextImageId()}`;\n                    imagesAccumulator.push({ id, type: key, base64: raw });\n                    updatedText = updatedText.replace(raw, `[${id}]`);\n                    continue;\n                }\n\n                // Recursive scan\n                scan(val);\n            }\n        }\n    }\n\n    scan(cell);\n    return updatedText;\n}\n\n//-----------------------------------------------------\n// Extract source string from a cell\n//-----------------------------------------------------\nfunction extractSource(cell) {\n    if (!cell || !cell.source) return \"\";\n    return Array.isArray(cell.source) ? cell.source.join(\"\") : String(cell.source);\n}\n\n//-----------------------------------------------------\n// MAIN EXECUTION: CLEAN NOTEBOOK + EXTRACT IMAGES\n//-----------------------------------------------------\nconst cells = $('Parse Notebook to JSON').first().json.cells || [];\n\nlet images = [];\nlet cleanedCells = [];\n\nfor (const cell of cells) {\n    let text = extractSource(cell);\n    text = extractImagesWithTrace(text, cell, images);\n\n    cleanedCells.push({\n        cell_type: cell.cell_type,\n        text\n    });\n}\n\n//-----------------------------------------------------\n// SECOND PASS: Extract student info\n//-----------------------------------------------------\nlet student = null\n\nfor (const [index, cell] of cleanedCells.entries()) {\n    const nameMatch = cell.text.match(/nombre_estudiante\\s*=\\s*\"([^\"]+)\"/);\n    const carnetMatch = cell.text.match(/carnet\\s*=\\s*(\\d+)/);\n\n    if (nameMatch || carnetMatch) {\n        student = {\n            nombre_estudiante: nameMatch ? nameMatch[1] : null,\n            carnet: carnetMatch ? Number(carnetMatch[1]) : null,\n            raw_text: cell.text,\n            cell_index: index\n        };\n      break\n    }\n}\n\n//-----------------------------------------------------\n// FINAL OUTPUT\n//-----------------------------------------------------\nif (student!= null) {\n  cleanedCells.splice(student.cell_index,1)\n}\nreturn [{\n    json: {\n        notebookClean: cleanedCells,\n        images: images,\n        student: student\n    }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1264,
+        16
+      ],
+      "id": "4c3421cd-c4e7-4746-b895-6460780e7f45",
+      "name": "Cleanup notebook JSON"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst fileContent = $input.first()['binary']['data']['data']\nconst jsonString = Buffer.from(fileContent, 'base64').toString('utf8');\nconsole.log(jsonString)\nconst notebook = JSON.parse(jsonString);\n\nreturn notebook"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1488,
+        16
+      ],
+      "id": "79c826a3-9ebc-40b6-8265-9484599d4ba4",
+      "name": "Parse Notebook to JSON"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "={{ $('Start').item.json.schema.toJsonString() }}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        256
+      ],
+      "id": "c9b7d374-18ed-4c45-b073-0bde040eae21",
+      "name": "OpenAI Chat Model1"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "={{ $('Start').item.json.schema.toJsonString() }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        256
+      ],
+      "id": "8e071e4f-77a3-4a33-9f81-c1190263cfe3",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "notebookClean",
+              "renameField": true,
+              "outputFieldName": "cells"
+            },
+            {
+              "fieldToAggregate": "data",
+              "renameField": true,
+              "outputFieldName": "images"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        32
+      ],
+      "id": "e99eaaaa-4b8f-40c2-923d-8cb6a2b9df93",
+      "name": "Unify inputs"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=A partir del siguiente enunciado : \n\n\" {{ $('Start').item.json.statement }} \"\n\nTu tarea es **evaluar** el contenido producido por un estudiante en cada una de las secciones del notebook ya clasificadas.  \nRecibirás un JSON donde cada celda contiene:\n- `id`\n- `text`\n- `cell_type` (markdown o codigo)\n\nEn el contenido de las celdas encontraras referencia a imagenes, adicionalmente vas a recibir una lista con la descripción de cada una de esas imagenes, usando el mismo identificador que en las celdas.\n\nDebes **leer todas las celdas**, agruparlas por sección, evaluar la calidad del contenido y asignar una **nota de 0.0 a 5.0** a cada sección. Si la celda contiene una imagen, debes tener en cuenta la descripción de dicha imagen.\n\nLa evaluación debe hacerse únicamente **con base en el texto presente** en las celdas clasificadas y la descripción de las imágenes.\n\nNo inventes contenido faltante.  \nNo completes secciones vacías.  \nNo ejecutes código.  \nUsa la descripción de las imágenes para completas las secciones\n\n---\nLa evaluación la realizarás utilizando la siguiente rúbrica: \n{{ $('Start').item.json.rubricContent }}\n## Instrucciones Finales\n\n- Evalúa el JSON completo que recibirás después de este prompt.\n- No repitas las instrucciones.\n- No resumas las celdas.\n- No reescribas el contenido del estudiante\n- Tu única tarea es calificar.\n\nAquí viene el JSON del notebook\n{{ $('Unify inputs').item.json.cells.toJsonString() }}\ny Aquí esta la descripción de las imágenes :\n{{ $('Unify inputs').item.json.images.toJsonString() }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        48,
+        32
+      ],
+      "id": "b2b5d820-8086-40d6-b0a6-7590a91414a6",
+      "name": "Grade assignment",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -400,
+        32
+      ],
+      "id": "767bb501-f86c-4246-97e0-a165ef9cacdb",
+      "name": "Wait for cells and images"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "fileSize",
+              "type": "number"
+            },
+            {
+              "name": "fileExtension"
+            },
+            {
+              "name": "rubricContent"
+            },
+            {
+              "name": "statement"
+            },
+            {
+              "name": "fileId"
+            },
+            {
+              "name": "sheetId"
+            },
+            {
+              "name": "schema",
+              "type": "object"
+            },
+            {
+              "name": "spreadSheetId"
+            }
+          ]
+        }
+      },
+      "id": "3f70e073-684e-4fd6-b525-6173b9071147",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -2192,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Start').item.json.spreadSheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Start').item.json.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nombre",
+              "displayName": "nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "codigo",
+              "displayName": "codigo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "especificacion",
+              "displayName": "especificacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "diseno",
+              "displayName": "diseno",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pruebas_enunciado",
+              "displayName": "pruebas_enunciado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pruebas_propias",
+              "displayName": "pruebas_propias",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "analisis_complejidad",
+              "displayName": "analisis_complejidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pruebas_rendimiento",
+              "displayName": "pruebas_rendimiento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "codigo_juez_evidencia",
+              "displayName": "codigo_juez_evidencia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "comentarios",
+              "displayName": "comentarios",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scores",
+              "displayName": "scores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        656,
+        32
+      ],
+      "id": "45a16493-c0a1-4322-8a1c-112118e6f2b5",
+      "name": "Append row in sheet"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Entrada: item.json.output (estructura variable)\n// También se recibe:\n//   nombre: {{ $('Cleanup notebook JSON').item.json.student.nombre_estudiante }}\n//   codigo: {{ $('Cleanup notebook JSON').item.json.student.carnet }}\n\nconst output = $input.first().json.output;\nconst result = {};\n\n// Agregar nombre y código del estudiante\nresult.nombre = $('Cleanup notebook JSON').first().json.student?.nombre_estudiante;\nresult.carnet = $('Cleanup notebook JSON').first().json.student?.carnet;\n\n// Recorrer todas las claves dinámicas del output\nfor (const key of Object.keys(output)) {\n\n  // Saltar \"comentarios\" para procesarlo aparte\n  if (key === \"comentarios\") continue;\n\n  // Agregar todas las llaves (float scores) al nivel raíz\n  result[key] = output[key];\n}\n\n// Comentarios como un solo string al final\nresult.comentarios = output.comentarios;\n\nreturn [{ json: result }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        32
+      ],
+      "id": "f3647d05-33af-41fc-a949-7ac30f726a6e",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "fileSize": 680320,
+          "fileExtension": "ipynb",
+          "rubricContent": "Secciones a Evaluar\n\nSe debe asignar una nota independiente para cada una de las siguientes secciones, con énfasis en la claridad, pensamiento crítico y aplicación práctica:\n\n1. especificacion\n2. diseno\n3. codigo\n4. pruebas_enunciado\n5. pruebas_propias\n6. analisis_complejidad\n7. pruebas_rendimiento\n8. codigo_juez + evidencia_juez (se califican como una sola sección integrada)\n\n---\n\nCriterios Generales de Evaluación (Enfoque Pedagógico)\n\n1. especificacion\nEvaluar la capacidad para abstraer y delimitar el problema, identificando claramente las entradas y salidas relevantes para diseñar la solución, sin depender del formato del juez ni necesidad de ejemplos o justificaciones detalladas. Se busca precisión conceptual y manejo independiente del problema.\n\n2. diseno\nValorar el razonamiento lógico y estructurado que sustenta la solución propuesta, fomentando la comunicación de ideas mediante pseudocódigo, diagramas o explicaciones textuales claras. No se trata de describir el código, sino de demostrar comprensión profunda y organización del algoritmo.\n\n3. codigo\nAnalizar la implementación en términos de corrección funcional, eficiencia algorítmica, calidad estructural y legibilidad. Se privilegia el correcto funcionamiento y la eficiencia para la problemática propuesta. Aspectos de estilo son considerados oportunidades de mejora sin penalización severa. Se espera código libre de fragmentos innecesarios del juez.\n\n4. pruebas_enunciado\nVerificar que el estudiante reproduzca fielmente los casos de prueba proveídos oficialmente, utilizando aserciones claras y completas o funciones adecuadas para asegurar la validez de las pruebas. No se esperan pruebas adicionales en esta sección.\n\n5. pruebas_propias\nIncentivar la creatividad y el pensamiento crítico mediante la creación de al menos dos casos de prueba propios, bien fundamentados y explicados. Se evalúa variedad, rigor y claridad en la exposición y uso adecuado de aserciones. La inclusión de casos extra no explicados solo genera recomendaciones sin afectar la nota.\n\n6. analisis_complejidad\nFomentar un análisis riguroso y fundamentado del comportamiento temporal en el peor caso, con claridad expositiva y precisión conceptual. Se valora la profundidad y coherencia en la justificación.\n\n7. pruebas_rendimiento\nPromover una experimentación metódica que utilice entradas crecientes, capaz de generar representaciones gráficas para ilustrar la evolución temporal. Se evalúa la calidad del diseño experimental, la pertinencia de los inputs y la interpretación crítica del estudiante frente a los resultados en función del análisis teórico previo.\n\n8. codigo_juez + evidencia_juez\nCorroborar la correcta integración y funcionalidad mediante evidencias de ejecución exitosa en el juez automático. Si la solución no pasa completamente, la calificación refleja qué tan cercana estuvo, con nota máxima parcial de 3 puntos.\n\n---\n\nFormato de Entrega de Evaluación\n\nEl formato obligatorio para devolver las calificaciones debe ser un JSON estructurado con las siguientes claves, contemplando notas de 0.0 a 5.0 y comentarios constructivos que expliquen el puntaje y sugieran mejoras:\n\n{\n    \"especificacion\": 0.0,\n    \"diseno\": 0.0,\n    \"codigo\": 0.0,\n    \"pruebas_enunciado\": 0.0,\n    \"pruebas_propias\": 0.0,\n    \"analisis_complejidad\": 0.0,\n    \"pruebas_rendimiento\": 0.0,\n    \"codigo_juez_evidencia\": 0.0\n    \"comentarios\": \"especificacion :.. diseño: ...\"  \n}\n\nRecomendaciones Pedagógicas:\n- Se debe valorar consistentemente el esfuerzo y progreso, permitiendo la nota máxima aún en presencia de detalles menores.\n- Los comentarios deben ser específicos, alentadores y orientados a guiar mejoras concretas.\n- Si una sección está ausente, asignar 0 con el comentario \"no hay contenido\" para destacar áreas a fortalecer.\n- No se penaliza la ausencia de comentarios en el código, equilibrando rigor con flexibilidad educativa.\n\nEsta versión de la rúbrica busca no solo evaluar resultados, sino también fomentar la reflexión, la comunicación efectiva y la mejora continua en el proceso de aprendizaje del estudiante.",
+          "statement": "In 1976 the \\Four Color Map Theorem\" was proven with the assistance of a computer. This theorem\nstates that every map can be colored using only four colors, in such a way that no region is colored\nusing the same color as a neighbor region.\nHere you are asked to solve a simpler similar problem. You have to decide whether a given arbitrary\nconnected graph can be bicolored. That is, if one can assign colors (from a palette of two) to the nodes\nin such a way that no two adjacent nodes have the same color. To simplify the problem you can assume:\n• no node will have an edge to itself.\n• the graph is nondirected. That is, if a node a is said to be connected to a node b, then you must\nassume that b is connected to a.\n• the graph will be strongly connected. That is, there will be at least one path from any node to\nany other node.\nInput\nThe input consists of several test cases. Each test case starts with a line containing the number n\n(1 < n < 200) of different nodes. The second line contains the number of edges l. After this, l lines will\nfollow, each containing two numbers that specify an edge between the two nodes that they represent.\nA node in the graph will be labeled using a number a (0 ≤ a < n).\nAn input with n = 0 will mark the end of the input and is not to be processed.\nOutput\nYou have to decide whether the input graph can be bicolored or not, and print it as shown below.\nSample Input\n3\n3\n0 1\n1 2\n2 0\n3\n2\n0 1\n1 2\n9\n8\n0 1\n0 2\n0 3\n0 4\n0 5\n0 6\n0 7\n0 8\n0\nSample Output\nNOT BICOLORABLE.\nBICOLORABLE.\nBICOLORABLE.",
+          "fileId": "1sEmFPEkdnZnZ86Loi7fYH1rugX7PuP9u",
+          "sheetId": "617064839",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "especificacion": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "diseno": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "codigo": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "pruebas_enunciado": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "pruebas_propias": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "analisis_complejidad": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "pruebas_rendimiento": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "codigo_juez_evidencia": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 5
+              },
+              "comentarios": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "especificacion",
+              "diseno",
+              "codigo",
+              "pruebas_enunciado",
+              "pruebas_propias",
+              "analisis_complejidad",
+              "pruebas_rendimiento",
+              "codigo_juez_evidencia",
+              "comentarios"
+            ],
+            "additionalProperties": false
+          },
+          "spreadSheetId": "1dEDhRtVigcypMlE9CZX5ALuTQL20WN3O29ovpnIUAwM"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-07T03:12:06.820Z",
+      "createdAt": "2025-12-07T03:12:06.820Z",
+      "role": "workflow:owner",
+      "workflowId": "IVduZtMBqZRFrjdk",
+      "projectId": "xJrjLvOBMTENgWyr"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-07T03:12:06.810Z",
+  "versionId": "e85e9f3e-1a61-41bb-860d-935c3c71dd2a"
+}
