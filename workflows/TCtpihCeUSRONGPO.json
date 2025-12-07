@@ -1,0 +1,179 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Store Error Log",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Error Log": {
+      "main": [
+        [
+          {
+            "node": "Call 'Update: Grafana Dashboard'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-07T03:13:10.277Z",
+  "id": "TCtpihCeUSRONGPO",
+  "isArchived": false,
+  "meta": null,
+  "name": "Error Logger",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        112
+      ],
+      "id": "58c8b09e-d148-41d3-b49f-ca1e24960d7e",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Alerta Automática: Error en Workflow</title>\n  <style>\n    body {\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background-color: #f4f6f9;\n      margin: 0;\n      padding: 20px;\n    }\n    .container {\n      background-color: #ffffff;\n      border-radius: 8px;\n      padding: 40px;\n      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);\n      margin: 0 auto;\n      max-width: 700px;\n    }\n    h1 {\n      color: #333;\n      font-size: 26px;\n      font-weight: 600;\n      margin-bottom: 15px;\n      text-align: center;\n    }\n    .alert-note {\n      background-color: #fff3cd;\n      color: #856404;\n      padding: 10px;\n      border-radius: 5px;\n      margin-bottom: 30px;\n      font-size: 14px;\n      text-align: center;\n    }\n    .info {\n      margin-bottom: 30px;\n    }\n    .info p {\n      margin: 10px 0;\n      line-height: 1.6;\n    }\n    .info .label {\n      font-weight: 600;\n      color: #007bff;\n    }\n    .info .value {\n      font-weight: 400;\n      color: #555;\n    }\n    .btn {\n      display: inline-block;\n      padding: 12px 24px;\n      background-color: #007bff;\n      color: #ffffff;\n      text-decoration: none;\n      border-radius: 5px;\n      font-weight: 600;\n      text-align: center;\n      margin-top: 20px;\n    }\n    .btn:hover {\n      background-color: #0056b3;\n    }\n    .footer {\n      margin-top: 40px;\n      text-align: center;\n      font-size: 12px;\n      color: #888;\n    }\n    .footer a {\n      color: #007bff;\n      text-decoration: none;\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"container\">\n    <h1>Alerta Automática: Error en Workflow</h1>\n\n    <div class=\"alert-note\">\n      <strong>Este es un mensaje automatizado.</strong> Por favor, no respondas a este correo.\n    </div>\n\n    <div class=\"info\">\n      <p><span class=\"label\">Workflow:</span> <span class=\"value\">{{ $json.workflow.name }}</span></p>\n      <p><span class=\"label\">Nodo con Error:</span> <span class=\"value\">{{ $json.execution.lastNodeExecuted }}</span></p>\n      <p><span class=\"label\">Mensaje de Error:</span> <span class=\"value\">{{ $json.execution.error.message }}</span></p>\n      <p><span class=\"label\">Fecha de Creación:</span> <span class=\"value\"></span>{{ $now.format('yyyy-MM-dd') }}</p>\n    </div>\n\n    <a href=\"http://localhost:5678/execution/workflow/1/231\" class=\"btn\">Ver Detalles del Error</a>\n  </div>\n\n  <div class=\"footer\">\n    <p>&copy; 2025 Todos los derechos reservados. <br> Si necesitas más asistencia, contacta con soporte técnico.</p>\n  </div>\n\n</body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "04eee6be-145e-40fd-8f44-7fe7729a8dc5",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "sendTo": "rojas.ortiz.juanc@gmail.com",
+        "subject": "Alerta Automática: Error Detectado en el Workflow",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        0
+      ],
+      "id": "a681873d-d50d-42ff-9a00-e07753c2a715",
+      "name": "Send a message",
+      "webhookId": "31fc8b28-154c-4f4d-97b0-26b83b86552a"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO error_logs (workflow, url, node, message)\nVALUES ('{{ $json.workflow.name }}', '{{ $json.execution.url }}', '{{ $json.execution.lastNodeExecuted }}', '{{ $json.execution.error.message }}');\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        288
+      ],
+      "id": "2aa9937c-74ad-403b-a168-e16cf0e486f2",
+      "name": "Store Error Log"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "JlQcLpuLaf59UmKR",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/JlQcLpuLaf59UmKR",
+          "cachedResultName": "Update: Grafana Dashboard"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        288
+      ],
+      "id": "20d8ce03-9101-474c-896a-e020e63eb22f",
+      "name": "Call 'Update: Grafana Dashboard'"
+    }
+  ],
+  "pinData": {
+    "HTML": [
+      {
+        "json": {
+          "html": "<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Alerta Automática: Error en Workflow</title>\n  <style>\n    body {\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background-color: #f4f6f9;\n      margin: 0;\n      padding: 20px;\n    }\n    .container {\n      background-color: #ffffff;\n      border-radius: 8px;\n      padding: 40px;\n      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);\n      margin: 0 auto;\n      max-width: 700px;\n    }\n    h1 {\n      color: #333;\n      font-size: 26px;\n      font-weight: 600;\n      margin-bottom: 15px;\n      text-align: center;\n    }\n    .alert-note {\n      background-color: #fff3cd;\n      color: #856404;\n      padding: 10px;\n      border-radius: 5px;\n      margin-bottom: 30px;\n      font-size: 14px;\n      text-align: center;\n    }\n    .info {\n      margin-bottom: 30px;\n    }\n    .info p {\n      margin: 10px 0;\n      line-height: 1.6;\n    }\n    .info .label {\n      font-weight: 600;\n      color: #007bff;\n    }\n    .info .value {\n      font-weight: 400;\n      color: #555;\n    }\n    .btn {\n      display: inline-block;\n      padding: 12px 24px;\n      background-color: #007bff;\n      color: #ffffff;\n      text-decoration: none;\n      border-radius: 5px;\n      font-weight: 600;\n      text-align: center;\n      margin-top: 20px;\n    }\n    .btn:hover {\n      background-color: #0056b3;\n    }\n    .footer {\n      margin-top: 40px;\n      text-align: center;\n      font-size: 12px;\n      color: #888;\n    }\n    .footer a {\n      color: #007bff;\n      text-decoration: none;\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"container\">\n    <h1>Alerta Automática: Error en Workflow</h1>\n\n    <div class=\"alert-note\">\n      <strong>Este es un mensaje automatizado.</strong> Por favor, no respondas a este correo.\n    </div>\n\n    <div class=\"info\">\n      <p><span class=\"label\">Workflow:</span> <span class=\"value\">Example Workflow</span></p>\n      <p><span class=\"label\">Nodo con Error:</span> <span class=\"value\">Node With Error</span></p>\n      <p><span class=\"label\">Mensaje de Error:</span> <span class=\"value\">Example Error Message</span></p>\n      <p><span class=\"label\">Fecha de Creación:</span> <span class=\"value\"></span>2025-11-27</p>\n    </div>\n\n    <a href=\"http://localhost:5678/execution/workflow/1/231\" class=\"btn\">Ver Detalles del Error</a>\n  </div>\n\n  <div class=\"footer\">\n    <p>&copy; 2025 Todos los derechos reservados. <br> Si necesitas más asistencia, contacta con soporte técnico.</p>\n  </div>\n\n</body>\n</html>\n"
+        }
+      }
+    ],
+    "Error Trigger": [
+      {
+        "json": {
+          "execution": {
+            "id": 231,
+            "url": "http://localhost:5678/execution/workflow/1/231",
+            "retryOf": "34",
+            "error": {
+              "message": "Example Error Message",
+              "stack": "Stacktrace"
+            },
+            "lastNodeExecuted": "Node With Error",
+            "mode": "manual"
+          },
+          "workflow": {
+            "id": "1",
+            "name": "Example Workflow"
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-07T03:13:10.280Z",
+      "createdAt": "2025-12-07T03:13:10.280Z",
+      "role": "workflow:owner",
+      "workflowId": "TCtpihCeUSRONGPO",
+      "projectId": "xJrjLvOBMTENgWyr"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-07T03:13:10.277Z",
+  "versionId": "8ed991ec-d1f5-43c8-8eed-fd6b4c45e420"
+}
